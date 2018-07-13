@@ -1,0 +1,78 @@
+
+\documentclass[11pt,a4paper]{memoir}
+
+\setstocksize{60mm}{85mm} % UK Stock size
+\setpagecc{60mm}{85mm}{*}
+\settypeblocksize{60mm}{75mm}{*}
+\setulmargins{5mm}{*}{*}
+\setlrmargins{5mm}{*}{*}
+\usepackage{xcolor}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{datatool}
+\usepackage{graphicx}
+\DTLsetseparator{,}
+\DTLloaddb{umpire}{Umpire_data.csv}
+
+
+\setheadfoot{0.1pt}{0.1pt}
+\setheaderspaces{1pt}{*}{*}
+\usepackage{fontspec}
+\setmainfont[]{EBGaramond12-Regular.ttf} 
+
+\checkandfixthelayout[fixed]
+
+\pagestyle{empty}
+
+\usepackage{pstricks}
+\usepackage{auto-pst-pdf,pst-barcode}
+
+\begin{document}
+\DTLforeach*{umpire}{\Surname=Name,\home=Hometown/Residence,\birth=Birth,\Service=Service Years,\pic=count}{
+    \begin{Spacing}{0.75}%
+    \noindent
+    \textbf{\Surname}\\
+    \tiny Comprehensive Ranking: 1th \hfill {\color{gray}Referee}\\ 
+    \rule{74mm}{.3mm}\\
+    \begin{minipage}[t]{33mm}
+    \begin{centering}
+        \vspace{-0mm}%
+        \includegraphics[height=30mm,width=30mm]{umpire_pic/\pic}
+	\captionof{figure}*{Overall Score: 90}
+    \end{centering}
+    \end{minipage}
+    \hspace{1mm}
+    \begin{minipage}[t]{50mm}
+        \vspace{-0mm}%
+        \begin{flushleft}
+        {\scriptsize
+            \begin{Spacing}{1}%
+            \textbf{Bio Info}\\
+            \begin{tabular}{ll}
+            	{\color{gray}Hometown Ratio} & \home\\
+            	{\color{gray}Birth} & \birth\\
+            	{\color{gray}Service Years} & \Service\\
+            \end{tabular}
+            \end{Spacing}
+        }
+        {\scriptsize
+        \begin{Spacing}{1}%
+		\textbf{Parameters Table}\\
+        	\begin{tabular}{lcc}
+            	{Indicators} & Numbers &Ranks\\
+            	{\color{gray}BC Ratio} & 10.5\%& 1\\
+            	{\color{gray}Weather} & 10\% & 1\\
+            	{\color{gray}BCR} & 40\% & 1\\   
+                {\color{gray}BCR} & 40\% & 1\\ 
+                {\color{gray}BCR} & 40\% & 1\\ 
+            \end{tabular}
+            \vspace*{2mm}
+        \end{Spacing}
+        }
+        \end{flushleft}
+    \end{minipage}
+    \end{Spacing}
+   \pagebreak}
+\end{document}
+
+
+
