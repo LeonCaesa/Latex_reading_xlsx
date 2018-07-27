@@ -3,7 +3,7 @@
 """
 Created on Fri Jan 12 14:52:52 2018
 
-@author: thelightofking
+@author: leonwang
 
 Web Scrapping Script to gather baseball umpire's information from MLB website.
 
@@ -51,6 +51,7 @@ pat_service2=re.compile(regex_service2,re.S)
 regex_picture=r'<img src="(/mlb/images/official_info/umpires/.*?.jpg)" width="275"'
 pat_picture=re.compile(regex_picture,re.S)
 
+
 # Informations are missing for some umpires
 born_date=[]
 hometown=[]
@@ -90,7 +91,7 @@ name=[]
 for i in umpire:
     if i[1] not in bad_name:
         name.append(i[1])
-data=pd.DataFrame(index=name,columns=['Birth','Hometown/Residence','Service Years','Picture_Url'])
+data=pd.DataFrame(index=name,columns=['Birth','Hometown/Residence','Service Years','Picture Url'])
 
 
 # Output the result for Latex Name Card Generation
@@ -98,15 +99,27 @@ for i in range(len(data)):
     data.iloc[i]['Birth']=born_date[i]
     data.iloc[i]['Hometown/Residence']=resides[i]
     data.iloc[i]['Service Years']=service_year[i]
-    data.iloc[i]['Picture_Url']='http://mlb.mlb.com/'+pictureurl[i]
-data.to_csv("Umpire_data.csv")
+    data.iloc[i]['Picture Url']='http://mlb.mlb.com/'+pictureurl[i]
 
+data['Name']=data.index
+data['count']=list(range(1,len(data)+1))
+data.to_csv("Umpire_data.csv",index=False)
 
 # Retrieve the Umpire Picture for Latex Name Card Generation
 from urllib.request import urlretrieve
-print(data['Picture_Url'])
-count=0
-for each_url in data['Picture_Url']:
-    count+=1
-    urlretrieve(each_url,"umpire_pic/"+str(count)+".png") 
+def Get_pic(url_list):
+    """
+        Function to get the pictures from url and restore the pics locally to umpire_pic/ directory
+        :params url_list a list contains all the urls of the pictures
+        :return None
+    """
+    count=0
+    for each_url in data['Picture Url']:
+        count+=1
+        urlretrieve(each_url,"umpire_pic/"+str(count)+".png") 
+
+
+Get_pic(data['Picture Url'])
+
+
 
